@@ -14,7 +14,8 @@ source("funcs.R", local = TRUE)
 shinyServer(function(input, output) {
   getResults <- reactive({
     results <- run_trials(input$a_fleg, input$a_dleg, input$a_barb, input$a_mili,
-                          input$d_fleg, input$d_dleg, input$d_barb, input$d_mili)
+                          input$d_fleg, input$d_dleg, input$d_barb, input$d_mili,
+                          input$flank)
     results
   })
   output$distPlot <- renderPlot({

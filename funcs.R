@@ -52,7 +52,7 @@ calc_result <- function(ahits, dhits, astrength, dstrength){
 
 
 
-run_trials <- function(afleg, adleg, abarb, amili, dfleg, ddleg, dbarb, dmili, trials=10000){
+run_trials <- function(afleg, adleg, abarb, amili, dfleg, ddleg, dbarb, dmili, flank = FALSE, trials=10000){
   
   results <- tibble(index = 1:trials)
   attack_strength <- tot_strength(afleg,adleg,abarb,amili)
@@ -63,6 +63,19 @@ run_trials <- function(afleg, adleg, abarb, amili, dfleg, ddleg, dbarb, dmili, t
     mutate(defence_hits = tot_hits(dfleg,ddleg,dbarb,dmili)) %>%
     mutate(outcome = calc_result(attack_hits, defence_hits, attack_strength, defence_strength)) %>%
     ungroup()
+  
+  if(flank){
+    losers <- results %>%
+      filter(outcome == "Defence wins")
+    winners <- results %>%
+      filter(outcome != "Defence wins")
+    losers <- losers %>%
+      rowwise() %>%
+      mutate(attack_hits = tot_hits(afleg,adleg,abarb,amili)) %>%
+      mutate(outcome = calc_result(attack_hits, defence_hits, attack_strength, defence_strength)) %>%
+      ungroup()
+    results <- rbind(winners,losers)
+  }
   
   results
 }

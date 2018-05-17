@@ -15,6 +15,7 @@ shinyUI(fluidPage(
   # Sidebar 
   sidebarLayout(
     sidebarPanel(
+      submitButton("Submit"),
       h3("Attack"),
       numericInput("a_fleg", label = "Full-strength legions", value = 0),
       numericInput("a_dleg", label = "Depleted legions", value = 0),
@@ -26,6 +27,7 @@ shinyUI(fluidPage(
       numericInput("d_barb", label = "Barbarians", value = 0),
       checkboxInput("d_mili", label = "Militia?", value = FALSE),
       h3("Events"),
+      checkboxInput("flank", label = "Flanking declared?", value = FALSE),
       selectInput("event", label="Event in play:",
                   choices = c("None","Plague of Cyprian", "Good Auguries", "Bad Auguries"),
                   selected = "None")
