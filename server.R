@@ -23,7 +23,12 @@ shinyServer(function(input, output) {
       need(!(input$a_mili && input$d_mili),
            "Militia on both sides is not possible"),
       need(!(input$leader == 'rival' && (input$d_fleg + input$d_dleg + input$d_barb + input$d_mili) > 0),
-           "Rival Emperors fight alone!")
+           "Rival Emperors fight alone!"),
+      need((input$a_fleg + input$a_dleg) >= input$a_barb,
+           "Roman army cannot have more barbarians than legions"),
+      need(!(((input$d_fleg + input$d_dleg) < input$d_barb) && (input$d_fleg + input$d_dleg) > 0),
+           "Roman army cannot have more barbarians than legions")
+      
     )
     results <- run_trials(input$a_fleg, input$a_dleg, input$a_barb, input$a_mili,
                           input$d_fleg, input$d_dleg, input$d_barb, input$d_mili,
