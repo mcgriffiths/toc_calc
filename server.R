@@ -18,7 +18,9 @@ shinyServer(function(input, output) {
       need(((input$d_fleg + input$d_dleg + input$d_mili + input$d_barb) > 0 | input$leader !='None'),
            "Defence must have at least one unit"),
       need(!((input$d_fleg + input$d_dleg + input$d_mili == 0) && input$d_cast), 
-           "Castra must be stacked with a Roman unit")
+           "Castra must be stacked with a Roman unit"),
+      need(!(input$a_mili && input$d_mili),
+           "Militia on both sides is not possible")
     )
     results <- run_trials(input$a_fleg, input$a_dleg, input$a_barb, input$a_mili,
                           input$d_fleg, input$d_dleg, input$d_barb, input$d_mili,
