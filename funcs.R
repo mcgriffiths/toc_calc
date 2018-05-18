@@ -8,7 +8,7 @@ test <- function(){
               for(dbarb in 0:1){
                 for(dmili in c(TRUE,FALSE)){
                   for(cast in c(TRUE,FALSE)){
-                    for(leader in c("none","ardshap","cniva")){
+                    for(leader in c("none","ardshap","cniva","rival")){
                       for(flank in c(TRUE,FALSE)){
                         for(event in c('plague', 'good_aug', 'bad_aug')){
                           print(c(afleg, adleg, abarb, amili, 
@@ -78,6 +78,9 @@ tot_hits <- function(fleg, dleg, barb, mili, event, leader, cast){
   }
   if(leader == 'cniva'){
     for (i in 1:2) nhits = nhits + roll_die(3)
+  }
+  if(leader == 'rival'){
+    for (i in 1:3) nhits = nhits + roll_die(4)
   }
   if(event == 'plague'){
     nhits = nhits + 1

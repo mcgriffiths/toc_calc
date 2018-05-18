@@ -8,9 +8,10 @@ source("funcs.R", local = TRUE)
 shinyServer(function(input, output) {
   getResults <- reactive({
     validate(
-      need((input$a_fleg + input$a_dleg + input$a_mili) > 0, 'Attack must have Roman units'),
+      need((input$a_fleg + input$a_dleg + input$a_mili) > 0, 
+           "Attack must have Roman units"),
       need(!((input$d_fleg + input$d_dleg + input$d_mili > 0) && input$leader != 'None'), 
-           "Barbarian Leader can't be in Roman army"),
+           "Barbarian Leader/Rival Emperor can't be in Roman army"),
       need(!((input$a_fleg + input$a_dleg ==0) && input$a_mili && input$a_barb > 0), 
            "Barbarians in a Roman army need a General"),
       need(!((input$d_fleg + input$d_dleg ==0) && input$d_mili && input$d_barb > 0), 
@@ -20,7 +21,9 @@ shinyServer(function(input, output) {
       need(!((input$d_fleg + input$d_dleg + input$d_mili == 0) && input$d_cast), 
            "Castra must be stacked with a Roman unit"),
       need(!(input$a_mili && input$d_mili),
-           "Militia on both sides is not possible")
+           "Militia on both sides is not possible"),
+      need(!(input$leader == 'rival' && (input$d_fleg + input$d_dleg + input$d_barb + input$d_mili) > 0),
+           "Rival Emperors fight alone!")
     )
     results <- run_trials(input$a_fleg, input$a_dleg, input$a_barb, input$a_mili,
                           input$d_fleg, input$d_dleg, input$d_barb, input$d_mili,
