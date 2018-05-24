@@ -54,6 +54,7 @@ tot_hits <- function(fleg, dleg, barb, mili, event, leader, cast){
     } else if(event == "bad_aug"){
       base <- 1
     }
+    
   }
   
   fleg_thresh <- base + 3
@@ -73,21 +74,31 @@ tot_hits <- function(fleg, dleg, barb, mili, event, leader, cast){
   if(mili){
     nhits = nhits + roll_die(mili_thresh)
   }
-  if(leader == 'ardshap'){
-    for (i in 1:2) nhits = nhits + roll_die(4)
+  
+  if((fleg + dleg + mili) > 0){
+    if(leader == 'shap'){
+      nhits = nhits - 1
+    }
+  } else {
+    if(leader == 'ard' | leader == 'shap'){
+      for (i in 1:2) nhits = nhits + roll_die(4)
+    }
+    if(leader == 'cniva'){
+      for (i in 1:2) nhits = nhits + roll_die(3)
+    }
+    if(leader == 'rival'){
+      for (i in 1:3) nhits = nhits + roll_die(4)
+    }
   }
-  if(leader == 'cniva'){
-    for (i in 1:2) nhits = nhits + roll_die(3)
-  }
-  if(leader == 'rival'){
-    for (i in 1:3) nhits = nhits + roll_die(4)
-  }
+  
   if(event == 'plague'){
     nhits = nhits + 1
   }
   if(cast){
-    if(nhits > 0) nhits <- nhits - 1
+    nhits <- nhits - 1
   }
+  if(nhits < 0) nhits <-0
+  
   nhits
 }
 
@@ -125,7 +136,7 @@ run_trials <- function(afleg, adleg, abarb, amili,
   if(leader != 'None') defence_strength <- defence_strength + 1
   
   results <- results %>% rowwise() %>%
-    mutate(attack = tot_hits(afleg,adleg,abarb,amili,event,'None',cast)) %>%
+    mutate(attack = tot_hits(afleg,adleg,abarb,amili,event,leader,cast)) %>%
     mutate(defence = tot_hits(dfleg,ddleg,dbarb,dmili,event,leader,FALSE)) %>%
     mutate(outcome = calc_result(attack, defence, attack_strength, defence_strength)) %>%
     ungroup()
@@ -138,7 +149,7 @@ run_trials <- function(afleg, adleg, abarb, amili,
     if(nrow(losers) > 0){
       losers <- losers %>%
         rowwise() %>%
-        mutate(attack = tot_hits(afleg,adleg,abarb,amili,event,'None',cast)) %>%
+        mutate(attack = tot_hits(afleg,adleg,abarb,amili,event,leader,cast)) %>%
         mutate(outcome = calc_result(attack, defence, attack_strength, defence_strength)) %>%
         ungroup()
       results <- rbind(winners,losers)

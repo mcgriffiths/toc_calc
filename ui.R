@@ -21,7 +21,7 @@ shinyUI(fluidPage(
       checkboxInput("d_mili", label = "Militia?", value = FALSE),
       checkboxInput("d_cast", label = "Castra?", value = FALSE),
       selectInput("leader", label="Barbarian Leader/Rival Emperor:",
-                  choices = c("None","Ardashir/Shapur"='ardshap', "Cniva"='cniva',
+                  choices = c("None","Ardashir"='ard',"Shapur"='shap', "Cniva"='cniva',
                               "Rival Emperor"='rival'),
                   selected = "None"),
       h3("Events"),
